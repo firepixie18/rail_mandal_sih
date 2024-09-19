@@ -1,6 +1,7 @@
 import React, { useState } from "react";
- // Replace with your actual import
-import { Upload, AlertCircle, CheckCircle } from "lucide-react";
+import { Upload } from "lucide-react";
+import Alert, { AlertDescription } from './Alert'; // Update the import path as needed
+import axios from "axios";
 
 const FileUpload = () => {
   const [file, setFile] = useState(null);
@@ -16,26 +17,33 @@ const FileUpload = () => {
       setFile(selectedFile);
       setFileName(selectedFile.name);
       setFileTypeError("");
+      setUploadStatus(null);
     } else {
       setFile(null);
       setFileName("");
       setFileTypeError("Invalid file type. Please upload an image, audio, or video file.");
+      setUploadStatus(null);
     }
   };
 
-  const upload = () => {
+  const upload = async () => {
     if (!file) {
       setUploadStatus("error");
       return;
     }
 
-    // Simulating upload process
     setUploadStatus("uploading");
-    setTimeout(() => {
+
+    try {
+      const response = await uploadFileToRoboflow(file);
+      console.log("Upload successful:", response);
       setUploadStatus("success");
       setFileName("");
       setFile(null);
-    }, 2000);
+    } catch (error) {
+      console.error("Upload failed:", error);
+      setUploadStatus("error");
+    }
   };
 
   return (
@@ -52,7 +60,7 @@ const FileUpload = () => {
             id="file-upload"
             type="file"
             className="hidden"
-            accept="image/jpeg, image/png, audio/mpeg, video/mp4"
+            accept="image/jpeg, image/png"
             onChange={handleFileChange}
           />
         </label>
@@ -63,8 +71,7 @@ const FileUpload = () => {
         </p>
       )}
       {fileTypeError && (
-        <Alert variant="destructive" className="mb-2">
-          <AlertCircle className="h-4 w-4" />
+        <Alert variant="error" className="mb-2">
           <AlertDescription>{fileTypeError}</AlertDescription>
         </Alert>
       )}
@@ -76,20 +83,18 @@ const FileUpload = () => {
             ? "bg-gray-800 text-white cursor-not-allowed"
             : "bg-black text-white hover:bg-gray-800 focus:ring-black"
         }`}
-        disabled={uploadStatus === "uploading"}
+        disabled={uploadStatus === "uploading" || !file}
       >
         {uploadStatus === "uploading" ? "Uploading..." : "Upload"}
       </button>
       {uploadStatus === "success" && (
-        <Alert className="mt-2">
-          <CheckCircle className="h-4 w-4" />
+        <Alert variant="success" className="mt-2">
           <AlertDescription>File uploaded successfully!</AlertDescription>
         </Alert>
       )}
       {uploadStatus === "error" && (
-        <Alert variant="destructive" className="mt-2">
-          <AlertCircle className="h-4 w-4" />
-          <AlertDescription>Please select a file before uploading.</AlertDescription>
+        <Alert variant="error" className="mt-2">
+          <AlertDescription>Upload failed. Please try again.</AlertDescription>
         </Alert>
       )}
     </div>
