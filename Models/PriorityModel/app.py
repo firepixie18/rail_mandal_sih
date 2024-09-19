@@ -52,6 +52,7 @@ from text_cleaner import clean_and_lemmatize_text  # Ensure this module is in th
 
 # Initialize Flask app
 app = Flask(__name__)
+CORS(app)
 
 # Set NLTK data path to the location where you have the wordnet data
 nltk_data_path = 'nltk_data'
