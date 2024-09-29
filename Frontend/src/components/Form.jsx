@@ -6,6 +6,8 @@ import FileUpload from "./FileUpload.jsx";
 import { useNavigate } from 'react-router-dom';
 import { usePnr } from "../contexts/PnrContext.jsx";
 import { Link } from "react-router-dom";
+
+import TypebotComponent from "./Chatbot.jsx";
 export function SignupFormDemo() {
   
   const { setPnrNumber } = usePnr();
@@ -60,6 +62,8 @@ export function SignupFormDemo() {
   };
 
   return (
+    <>
+    <div className="flex w-full">
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg p-8">
         <div className="w-[1400] flex justify-between items-center mb-8">
@@ -161,6 +165,13 @@ export function SignupFormDemo() {
         </form>
       </div>
     </div>
+    
+    </div>
+    <div className="fflex-1 flex p-4"> {/* Added padding for spacing */}
+    <TypebotComponent />
+  </div>
+    </>
+    
   );
 }
 
