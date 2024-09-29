@@ -3,7 +3,9 @@ import axios from "axios"; // Make sure to import axios
 import { Label } from "./ui/Label.jsx";
 import { Input } from "./ui/Input.jsx";
 import FileUpload from "./FileUpload.jsx";
+import { useNavigate } from 'react-router-dom';
 
+import { Link } from "react-router-dom";
 export function SignupFormDemo() {
   const [selectedType, setSelectedType] = useState("");
   const [incidentDate, setIncidentDate] = useState("");
@@ -11,16 +13,17 @@ export function SignupFormDemo() {
   const [journeyDetails, setJourneyDetails] = useState("");
   const [pnrNumber, setPnrNumber] = useState("");
   const [grievanceDescription, setGrievanceDescription] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = {
-      mobileNumber,
+      contactNo:mobileNumber,
       journeyDetails,
-      pnrNumber,
-      selectedType,
-      incidentDate,
+      pnrNo:pnrNumber,
+      grievanceDescription,
+      incidentDate
     };
 
     const formData2 = {
@@ -28,16 +31,18 @@ export function SignupFormDemo() {
     };
 
     try {
-      const response = await axios.post('YOUR_BACKEND_ENDPOINT', formData, {
+      const response1 = await axios.post('api/v1/add-consumer', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
 
+      
+
       console.log('Form submitted successfully:', response.data);
       
       // If you want to send formData2 as well:
-      const response2 = await axios.post('https://rail-flash-model.onrender.com/predict', formData2, {
+      const response3 = await axios.post('https://rail-flash-model.onrender.com/predict', formData2, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -49,12 +54,13 @@ export function SignupFormDemo() {
       console.error('Error submitting grievance description:', error);
       // Handle error (e.g., show an error message)
     }
+    navigate("/landing")
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg p-8">
-        <div className="flex justify-between items-center mb-8">
+        <div className="w-[1400] flex justify-between items-center mb-8">
           <h2 className="text-3xl font-bold text-gray-800">Grievance Details</h2>
           <p className="text-sm text-gray-600">*Mandatory Fields</p>
         </div>
@@ -72,9 +78,7 @@ export function SignupFormDemo() {
                 onChange={(e) => setMobileNumber(e.target.value)}
               />
             </LabelInputContainer>
-            <button className="w-32 mx-auto px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition-colors">
-              Get OTP
-            </button>
+            
           </div>
 
           <LabelInputContainer>
@@ -141,13 +145,14 @@ export function SignupFormDemo() {
               onChange={(e) => setGrievanceDescription(e.target.value)}
             />
           </LabelInputContainer>
-
+          
           <button
             className="w-full bg-black text-white rounded-md py-2 px-4 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50 transition-colors"
-            type="submit"
+            type="submit" 
           >
             Submit Grievance
           </button>
+          
         </form>
       </div>
     </div>
