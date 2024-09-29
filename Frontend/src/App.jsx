@@ -16,6 +16,7 @@ import './App.css';
 import { SignupFormDemo } from './components/Form';
 import ComplaintStatusPage from '../src/components/Landing.jsx'
 import { BrowserRouter,Routes,Route } from 'react-router-dom';
+import { PnrProvider } from './contexts/PnrContext.jsx';
 
 function App() {
   
@@ -42,10 +43,14 @@ function App() {
   return (
     <>
     <BrowserRouter>
+    <PnrProvider>
      <Routes>
+      
       <Route path="/" element={<SignupFormDemo/>}/>
       <Route path="/landing" element={<ComplaintStatusPage/>}/>
+      
      </Routes>
+     </PnrProvider>
       </BrowserRouter>
     </>
   );

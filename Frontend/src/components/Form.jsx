@@ -1,20 +1,22 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios"; // Make sure to import axios
 import { Label } from "./ui/Label.jsx";
 import { Input } from "./ui/Input.jsx";
 import FileUpload from "./FileUpload.jsx";
 import { useNavigate } from 'react-router-dom';
-
+import { usePnr } from "../contexts/PnrContext.jsx";
 import { Link } from "react-router-dom";
 export function SignupFormDemo() {
+  
+  const { setPnrNumber } = usePnr();
   const [selectedType, setSelectedType] = useState("");
   const [incidentDate, setIncidentDate] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [journeyDetails, setJourneyDetails] = useState("");
-  const [pnrNumber, setPnrNumber] = useState("");
+  const [pnrNumber, setLocalPnrNumber] = useState();
   const [grievanceDescription, setGrievanceDescription] = useState("");
   const navigate = useNavigate();
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -101,7 +103,10 @@ export function SignupFormDemo() {
               type="text"
               className="border-gray-300 focus:border-black focus:ring-black"
               value={pnrNumber}
-              onChange={(e) => setPnrNumber(e.target.value)}
+              onChange={(e) => {
+                setLocalPnrNumber(e.target.value);
+                setPnrNumber(e.target.value)
+              }}
             />
           </LabelInputContainer>
 

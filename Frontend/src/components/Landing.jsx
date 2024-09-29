@@ -214,6 +214,7 @@
 import React, { useState, useEffect } from 'react';
 import { Star, Train, CheckCircle, Clock, AlertCircle, MessageCircle, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { usePnr } from '../contexts/PnrContext.jsx';
 
 const ComplaintStatusPage = () => {
   const [rating, setRating] = useState(0);
@@ -222,9 +223,10 @@ const ComplaintStatusPage = () => {
   const [loadProgress, setLoadProgress] = useState(0);
   const [showPNR, setShowPNR] = useState(false);
     const navigate=useNavigate();
+    const {pnrNumber}=usePnr();
   // Mock data - replace with actual data in a real application
   const complaintData = {
-    pnr: "PNR123456",
+    pnr: pnrNumber,
     status: "In Progress",
     submissionDate: "2024-09-15",
     summary: "Delay in train arrival at destination"
